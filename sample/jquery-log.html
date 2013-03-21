@@ -4,17 +4,17 @@
     <title>jQuery-Log sample</title>
 </head>
 <body>
-    <a href="http://www.twenga.fr" data-rv="allo, non mais allo !">Log me</a>
-    <a href="http://www.rvdevsign.net/">Log me too</a>
+    <a href="http://www.twenga.fr" data-rv="allo, non mais allo !">Log me</a> |
+    <span href="http://www.rvdevsign.net/">Log me too</span>
     <script src="http://code.jquery.com/jquery-1.8.2.min.js" type="text/javascript"></script>
     <script src="../log.jquery-lasted.js" type="text/javascript"></script>
     <script type="text/javascript">
-        $.log({ url: 'http://www.twenga.fr/logMe' });
+        $.log({ url: 'http://www.twenga.fr/logMe', usleep: 3000 });
 
-        $('a').bind('click', function(e)
+        $('a, span').bind('click', function(e)
         {
             e.preventDefault();
-            $.logIt(this, { coucou: 'sdfsdf' });
+            $.logIt(this, { coucou: 'hervé' });
             return false;
         });
     </script> 

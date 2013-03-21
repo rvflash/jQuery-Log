@@ -8,63 +8,60 @@
  * @see https://github.com/rvflash/jQuery-LogEvent
  */
 ;
-var Log =
-{
-    _available: true,
-    _data: [],
-    _fail: 0,
-    defaults : {
-        type: 'POST',
-        url: '',
-        interval: 1000,
-        maxFail: 3
-    },
-    add: function (data)
-    {
-        this._data.push(data);
-    },
-    listen: function()
-    {
-        window.onbeforeunload = function()
-        {
-            Log.notify(true);
-        };
-        window.setInterval(function()
-        {
-            Log.notify(false);
-        },
-            Log.defaults.interval
-        );
-    },
-    notify: function(force)
-    {
-        if (
-            'undefined' != typeof jQuery && '' != this.defaults.url && this._available && 0 < this._data.length &&
-            (force || this._fail < this.defaults.maxFail)
-        ) {
-            var data = this._data;
-            this._data = [];
-            this._available = false;
-
-            jQuery.ajax(
-            {
-               url: this.defaults.url,
-               type: this.defaults.type,
-               data: { d: data}
-            }).fail(function()
-            {
-                jQuery.merge(Log._data, data);
-                Log._fail ++;
-            }).always(function()
-            {
-                Log._available = true;
-            });
-        }
-    }
-};
-
 (function($)
 {
+    var Log =
+    {
+        _available: true,
+        _data: [],
+        _fail: 0,
+        defaults : {
+            type: 'POST',
+            url: '',
+            interval: 1000,
+            maxFail: 3
+        },
+        add: function (data)
+        {
+            this._data.push(data);
+        },
+        listen: function()
+        {
+            // Try before to leave page
+            window.onbeforeunload = function() { Log.notify(true); };
+
+            // Daemon
+            window.setInterval(function() { Log.notify(false); }, Log.defaults.interval);
+        },
+        notify: function(force)
+        {
+            if ('undefined' == typeof force) {
+                force = false;
+            }
+            force = (force || this._fail < this.defaults.maxFail);
+
+            if ('' != this.defaults.url && this._available && 0 < this._data.length && force) {
+                var data = this._data;
+                this._data = [];
+                this._available = false;
+
+                $.ajax(
+                {
+                    url: this.defaults.url,
+                    type: this.defaults.type,
+                    data: { d: data}
+                }).fail(function()
+                {
+                    $.merge(Log._data, data);
+                    Log._fail ++;
+                }).always(function()
+                {
+                    Log._available = true;
+                });
+            }
+        }
+    };
+
     // Define log behavior and start listening
     $.log = function(settings)
     {
