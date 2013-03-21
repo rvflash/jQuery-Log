@@ -27,16 +27,16 @@ var Log =
     {
         window.onbeforeunload = function()
         {
-            Log._notify(true);
+            Log.notify(true);
         };
         window.setInterval(function()
         {
-            Log._notify(false);
+            Log.notify(false);
         },
             Log.defaults.interval
         );
     },
-    _notify: function(force)
+    notify: function(force)
     {
         if (
             'undefined' != typeof jQuery && '' != this.defaults.url && this._available && 0 < this._data.length &&
