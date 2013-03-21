@@ -1,0 +1,22 @@
+<html>
+    <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>jQuery-Log sample</title>
+</head>
+<body>
+    <a href="http://www.twenga.fr" data-rv="allo, non mais allo !">Log me</a>
+    <a href="http://www.rvdevsign.net/">Log me too</a>
+    <script src="http://code.jquery.com/jquery-1.8.2.min.js" type="text/javascript"></script>
+    <script src="../log.jquery-lasted.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $.log({ url: 'http://www.twenga.fr/logMe' });
+
+        $('a').bind('click', function(e)
+        {
+            e.preventDefault();
+            $.logIt(this, { coucou: 'sdfsdf' });
+            return false;
+        });
+    </script> 
+</body>
+</html>
